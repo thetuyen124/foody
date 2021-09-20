@@ -32,7 +32,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const { setLogin } = React.useContext(mainContext);
+  const { token, setToken } = React.useContext(mainContext);
 
   const [submitting, setSubmitting] = React.useState(false);
 
@@ -47,7 +47,8 @@ export default function SignInSide() {
     setSubmitting(true);
     setTimeout(() => {
       setSubmitting(false);
-      setLogin(false);
+      setToken("czxcsa");
+      localStorage.setItem("token", "ascxz");
     }, 2000);
   };
 

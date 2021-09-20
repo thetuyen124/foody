@@ -12,34 +12,34 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [showShoppingCart, setShowShoppingCart] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [login, setLogin] = useState(false);
 
   return (
-    <Router>
-      <mainContext.Provider
-        value={{
-          countCart,
-          setCountCart,
-          token,
-          setToken,
-          showShoppingCart,
-          setShowShoppingCart,
-          searchTerm,
-          setSearchTerm,
-          setLogin,
-        }}
-      >
-        {!login ? (
-          <body>
-            <Header />
-            <Content />
-            <Footer />
-          </body>
-        ) : (
-          <SignInSide />
-        )}
-      </mainContext.Provider>
-    </Router>
+    <body>
+      <Router>
+        <mainContext.Provider
+          value={{
+            countCart,
+            setCountCart,
+            token,
+            setToken,
+            showShoppingCart,
+            setShowShoppingCart,
+            searchTerm,
+            setSearchTerm,
+          }}
+        >
+          {token ? (
+            <>
+              <Header />
+              <Content />
+              <Footer />
+            </>
+          ) : (
+            <SignInSide />
+          )}
+        </mainContext.Provider>
+      </Router>
+    </body>
   );
 }
 export default App;

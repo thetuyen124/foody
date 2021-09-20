@@ -1,0 +1,22 @@
+.card {
+  display: inline-block;
+  margin: 5px;
+}
+.card .MuiCardHeader-content {
+  text-align: start;
+}
+.card .MuiCardHeader-content .MuiCardHeader-title {
+  color: #bc412b;
+  text-transform: capitalize;
+}
+.card .MuiCardHeader-content .MuiCardHeader-subheader {
+  color: rgb(200, 80, 80, 0.5);
+  font-size: 0.8em;
+}
+.card .MuiCardActions-root input {
+  border: 0px;
+}
+.card .css-46bh2p-MuiCardContent-root {
+  padding: 0;
+  padding-top: 10px;
+}

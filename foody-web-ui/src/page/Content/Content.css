@@ -1,0 +1,14 @@
+.container {
+  margin-top: 50px;
+  box-sizing: content-box;
+}
+.container .MuiTabs-root .Mui-selected {
+  color: #bc412b;
+  background-color: #c9e6c9;
+}
+.container #simple-tabpanel {
+  background-color: #c9e6c9;
+}
+.container .content-filed {
+  text-align: center;
+}
