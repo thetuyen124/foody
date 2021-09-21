@@ -14,7 +14,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import LoginIcon from "@mui/icons-material/Login";
 import mainContext from "../../context/mainContext";
 
 const Search = styled("div")(({ theme }) => ({
@@ -67,12 +66,9 @@ const Header = () => {
     showShoppingCart,
     searchTerm,
     setSearchTerm,
-    token,
     setToken,
-    setLogin,
   } = React.useContext(mainContext);
 
-  const isLogin = token;
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -89,12 +85,8 @@ const Header = () => {
     console.log("profile");
   };
 
-  const handleLoginOnClick = () => {
-    setLogin(true);
-  };
-
   const handleLogoutOnclick = () => {
-    setToken("");
+    setToken(null);
     localStorage.clear();
   };
 
@@ -160,33 +152,18 @@ const Header = () => {
         </IconButton>
         <p>Shopping cart</p>
       </MenuItem>
-      {isLogin ? (
-        <MenuItem onClick={handleProfileMenuOpen}>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      ) : (
-        <MenuItem onClick={handleLoginOnClick}>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <LoginIcon />
-          </IconButton>
-          <p>Login</p>
-        </MenuItem>
-      )}
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Profile</p>
+      </MenuItem>
     </Menu>
   );
 
@@ -220,31 +197,17 @@ const Header = () => {
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            {isLogin ? (
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            ) : (
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="Log into system"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleLoginOnClick}
-                color="inherit"
-              >
-                <LoginIcon />
-              </IconButton>
-            )}
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton

@@ -13,6 +13,9 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import mainContext from "../../context/mainContext";
 import { Backdrop, CircularProgress } from "@mui/material";
+import { useHistory } from "react-router";
+import { isExpired } from "react-jwt";
+import { Redirect } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -33,6 +36,7 @@ const theme = createTheme();
 
 export default function SignInSide() {
   const { token, setToken } = React.useContext(mainContext);
+  const history = useHistory();
 
   const [submitting, setSubmitting] = React.useState(false);
 
@@ -49,8 +53,11 @@ export default function SignInSide() {
       setSubmitting(false);
       setToken("czxcsa");
       localStorage.setItem("token", "ascxz");
+      history.push("/");
     }, 2000);
   };
+
+  if (isExpired(token)) return <Redirect to="/" />;
 
   return (
     <ThemeProvider theme={theme}>

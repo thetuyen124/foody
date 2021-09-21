@@ -1,11 +1,11 @@
 import "./App.css";
-import Footer from "./page/Footer/Footer";
-import Header from "./page/Header/Header";
 import mainContext from "./context/mainContext";
 import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import SignInSide from "./page/SignInSide/SignInSide";
-import Content from "./page/Content/Content";
+import NormalUserPage from "./page/NormalUserPage/NormalUserPage";
+import { Route, Switch } from "react-router-dom";
+import PrivateRoute from "./component/PrivateRoute/PrivateRoute";
 
 function App() {
   const [countCart, setCountCart] = useState(0);
@@ -28,15 +28,10 @@ function App() {
             setSearchTerm,
           }}
         >
-          {token ? (
-            <>
-              <Header />
-              <Content />
-              <Footer />
-            </>
-          ) : (
-            <SignInSide />
-          )}
+          <Switch>
+            <Route path="/login" component={SignInSide} />
+            <PrivateRoute path="/" component={NormalUserPage} exact />;
+          </Switch>
         </mainContext.Provider>
       </Router>
     </body>
