@@ -1,0 +1,32 @@
+jwt:
+  secret: TuyenNguyenThe@TLU
+  timeout: 15 * 60 * 1000
+server:
+  servlet:
+    contextPath: /api/v1
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/food_delivery?useSSL=false
+    username: admin
+    password: Tuyennhe124
+    driverClassName: com.mysql.cj.jdbc.Driver
+    validationQuery: SELECT 1
+    platform: mysql
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      dll-auto: validate
+    properties:
+      hibernate:
+        id:
+          new_generator_mappings: false
+        order_inserts: true
+        order_updates: true
+        show_sql: true
+        format_sql: false
+        generate_statistics: false
+        jdbc:
+          batch_size: 20
+          batch_versioned_data: true
+        dialect: org.hibernate.dialect.MySQL8Dialect

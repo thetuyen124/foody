@@ -25,7 +25,7 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © ..."}
+      {"Copyright © ... "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -51,13 +51,13 @@ export default function SignInSide() {
     setSubmitting(true);
     setTimeout(() => {
       setSubmitting(false);
-      setToken("czxcsa");
+      setToken("ascxz");
       localStorage.setItem("token", "ascxz");
       history.push("/");
     }, 2000);
   };
 
-  if (isExpired(token)) return <Redirect to="/" />;
+  // if (isExpired(token)) return <Redirect to="/" />;
 
   return (
     <ThemeProvider theme={theme}>
