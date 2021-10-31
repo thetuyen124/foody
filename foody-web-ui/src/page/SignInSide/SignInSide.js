@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -14,8 +12,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import mainContext from "../../context/mainContext";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { useHistory } from "react-router";
-import { isExpired } from "react-jwt";
+import { isExpired, decodeToken } from "react-jwt";
 import { Redirect } from "react-router-dom";
+
+import { httpClient } from "../../share/httpClient.js";
 
 function Copyright(props) {
   return (
@@ -43,28 +43,50 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
+    var user = {
+      username: data.get("username"),
       password: data.get("password"),
-    });
+    };
+    const switchPage = (role) => {
+      console.log(role);
+      switch (role) {
+        case "ROLE_SADMIN":
+          history.push("/sadmin");
+          break;
+        case "ROLE_ADMIN":
+          history.push("/admin");
+          break;
+        case "ROLE_STAFF":
+          history.push("/staff");
+          break;
+        case "ROLE_USER":
+          history.push("/");
+          break;
+      }
+    };
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setToken("ascxz");
-      localStorage.setItem("token", "ascxz");
-      history.push("/");
-    }, 2000);
+    httpClient
+      .post("api/v1/authenticate", user)
+      .then((res) => {
+        console.log(res);
+        setToken(res.data.jwttoken);
+        setSubmitting(false);
+        localStorage.setItem("token", res.data.jwttoken);
+        switchPage(decodeToken(res.data.jwttoken).role[0].authority);
+      })
+      .catch((error) => {
+        setSubmitting(false);
+        console.log(error.response.data);
+      });
   };
 
-  // if (isExpired(token)) return <Redirect to="/" />;
+  if (!isExpired(token)) return <Redirect to="/" />;
 
   return (
     <ThemeProvider theme={theme}>
       <Backdrop
         sx={{ color: "#bc412b", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={submitting}
-        // onClick={handleClose}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -119,13 +141,14 @@ export default function SignInSide() {
               sx={{ mt: 1 }}
             >
               <TextField
+                error={false}
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
                 autoFocus
               />
               <TextField
@@ -137,10 +160,6 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
               />
               <Button
                 type="submit"

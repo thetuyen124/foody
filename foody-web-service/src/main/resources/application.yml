@@ -1,6 +1,6 @@
 jwt:
   secret: TuyenNguyenThe@TLU
-  timeout: 15 * 60 * 1000
+  timeout: 86400000
 server:
   servlet:
     contextPath: /api/v1

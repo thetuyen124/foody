@@ -10,13 +10,13 @@ import com.tlu.datn.foody.repository.InvoiceDetailRepository;
 
 @RestController()
 public class InvoiceDetailController {
-  
-  @Autowired
-  private InvoiceDetailRepository invoice;
-  
-  @GetMapping("/hello")
-  @CrossOrigin
-  public List<InvoiceDetail> hello() {
-    return invoice.findAll();
-  }
+
+    @Autowired
+    private InvoiceDetailRepository invoice;
+
+    @GetMapping("/hello")
+    @CrossOrigin
+    public List<InvoiceDetail> hello() {
+	return invoice.findAll();
+    }
 }

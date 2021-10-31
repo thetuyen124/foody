@@ -9,89 +9,88 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="invoices")
+@Table(name = "invoices")
 public class Invoice {
 
-  @Id
-  @Column(name="id")
-  private int Id;
-  
-  @ManyToOne
-  @JoinColumn(name = "buyer")
-  private User Buyer;
-  
-  @ManyToOne
-  @JoinColumn(name = "@ManyToOne\r\n"
-      + "  @JoinColumn(name = \"buyer\")")
-  private User HandlerInvoice;
-  
-  @Column(name="order_date")
-  private Date OrderDate;
-  
-  @ManyToOne
-  @JoinColumn(name = "location_code")
-  private Location Location;
-  
-  @Column(name="price")
-  private int Price;
-  
-  @Column(name="state")
-  private String State;
+    @Id
+    @Column(name = "id")
+    private int Id;
 
-  public int getId() {
-    return Id;
-  }
+    @ManyToOne
+    @JoinColumn(name = "buyer")
+    private User Buyer;
 
-  public void setId(int id) {
-    Id = id;
-  }
+    @ManyToOne
+    @JoinColumn(name = "handler_invoice")
+    private User HandlerInvoice;
 
-  public User getBuyer() {
-    return Buyer;
-  }
+    @Column(name = "order_date")
+    private Date OrderDate;
 
-  public void setBuyer(User buyer) {
-    Buyer = buyer;
-  }
+    @ManyToOne
+    @JoinColumn(name = "location_code")
+    private Location Location;
 
-  public User getHandlerInvoice() {
-    return HandlerInvoice;
-  }
+    @Column(name = "price")
+    private int Price;
 
-  public void setHandlerInvoice(User handlerInvoice) {
-    HandlerInvoice = handlerInvoice;
-  }
+    @Column(name = "state")
+    private String State;
 
-  public Date getOrderDate() {
-    return OrderDate;
-  }
+    public int getId() {
+	return Id;
+    }
 
-  public void setOrderDate(Date orderDate) {
-    OrderDate = orderDate;
-  }
+    public void setId(int id) {
+	Id = id;
+    }
 
-  public Location getLocation() {
-    return Location;
-  }
+    public User getBuyer() {
+	return Buyer;
+    }
 
-  public void setLocation(Location location) {
-    Location = location;
-  }
+    public void setBuyer(User buyer) {
+	Buyer = buyer;
+    }
 
-  public int getPrice() {
-    return Price;
-  }
+    public User getHandlerInvoice() {
+	return HandlerInvoice;
+    }
 
-  public void setPrice(int price) {
-    Price = price;
-  }
+    public void setHandlerInvoice(User handlerInvoice) {
+	HandlerInvoice = handlerInvoice;
+    }
 
-  public String getState() {
-    return State;
-  }
+    public Date getOrderDate() {
+	return OrderDate;
+    }
 
-  public void setState(String state) {
-    State = state;
-  }
-  
+    public void setOrderDate(Date orderDate) {
+	OrderDate = orderDate;
+    }
+
+    public Location getLocation() {
+	return Location;
+    }
+
+    public void setLocation(Location location) {
+	Location = location;
+    }
+
+    public int getPrice() {
+	return Price;
+    }
+
+    public void setPrice(int price) {
+	Price = price;
+    }
+
+    public String getState() {
+	return State;
+    }
+
+    public void setState(String state) {
+	State = state;
+    }
+
 }

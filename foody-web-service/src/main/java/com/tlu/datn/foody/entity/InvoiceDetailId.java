@@ -7,17 +7,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Embeddable
-public class InvoiceDetailId implements Serializable{
+public class InvoiceDetailId implements Serializable {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-  @ManyToOne
-  @JoinColumn(name = "invoice_id")
-  private Invoice Invoice;
+    @ManyToOne
+    @JoinColumn(name = "invoice_id")
+    private Invoice Invoice;
 
-  @Column(name = "product_name")
-  private int ProductName;
+    @Column(name = "product_name")
+    private int ProductName;
 }

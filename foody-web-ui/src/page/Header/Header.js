@@ -82,7 +82,6 @@ const Header = () => {
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    console.log("profile");
   };
 
   const handleLogoutOnclick = () => {

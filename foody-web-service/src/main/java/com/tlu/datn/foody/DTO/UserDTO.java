@@ -1,67 +1,85 @@
 package com.tlu.datn.foody.DTO;
 
-import com.tlu.datn.foody.entity.Location;
-
 public class UserDTO {
 
-  private String Username;
+    private String Username;
 
-  private String FirstName;
+    private String FirstName;
 
-  private String LastName;
+    private String LastName;
 
-  private String PhoneNumber;
+    private String PhoneNumber;
 
-  private String Type;
+    private String Type;
 
-  private Location Location;
+    private String Location;
 
-  public String getUsername() {
-    return Username;
-  }
+    private String State;
+    
+    private String IdNumber;
 
-  public void setUsername(String username) {
-    Username = username;
-  }
+    public String getUsername() {
+	return Username;
+    }
 
-  public String getFirstName() {
-    return FirstName;
-  }
+    public void setUsername(String username) {
+	Username = username;
+    }
 
-  public void setFirstName(String firstName) {
-    FirstName = firstName;
-  }
+    public String getFirstName() {
+	return FirstName;
+    }
 
-  public String getLastName() {
-    return LastName;
-  }
+    public void setFirstName(String firstName) {
+	FirstName = firstName;
+    }
 
-  public void setLastName(String lastName) {
-    LastName = lastName;
-  }
+    public String getLastName() {
+	return LastName;
+    }
 
-  public String getPhoneNumber() {
-    return PhoneNumber;
-  }
+    public void setLastName(String lastName) {
+	LastName = lastName;
+    }
 
-  public void setPhoneNumber(String phoneNumber) {
-    PhoneNumber = phoneNumber;
-  }
+    public String getPhoneNumber() {
+	return PhoneNumber;
+    }
 
-  public String getType() {
-    return Type;
-  }
+    public void setPhoneNumber(String phoneNumber) {
+	PhoneNumber = phoneNumber;
+    }
 
-  public void setType(String type) {
-    Type = type;
-  }
+    public String getType() {
+	return Type;
+    }
 
-  public Location getLocation() {
-    return Location;
-  }
+    public void setType(String type) {
+	Type = type;
+    }
 
-  public void setLocation(Location location) {
-    Location = location;
-  }
+    public String getLocation() {
+	return Location;
+    }
+
+    public void setLocation(String location) {
+	Location = location;
+    }
+
+    public String getState() {
+	return State;
+    }
+
+    public void setState(String state) {
+	State = state;
+    }
+
+    public String getIdNumber() {
+        return IdNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        IdNumber = idNumber;
+    }
 
 }

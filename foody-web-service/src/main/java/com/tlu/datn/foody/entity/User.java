@@ -10,105 +10,105 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 public class User {
-  @Id
-  @Column(name = "username")
-  private String Username;
+    @Id
+    @Column(name = "username")
+    private String Username;
 
-  @Column(name = "first_name")
-  private String FirstName;
+    @Column(name = "first_name")
+    private String FirstName;
 
-  @Column(name = "last_name")
-  private String LastName;
+    @Column(name = "last_name")
+    private String LastName;
 
-  @Column(name = "id_number")
-  private String IdNumber;
+    @Column(name = "id_number")
+    private String IdNumber;
 
-  @Column(name = "phone_number")
-  private String PhoneNumber;
+    @Column(name = "phone_number")
+    private String PhoneNumber;
 
-  @Column(name = "type")
-  private String Type;
+    @Column(name = "type")
+    private String Type;
 
-  @Column(name = "password")
-  private String Password;
+    @Column(name = "password")
+    private String Password;
 
-  @ManyToOne
-  @JoinColumn(name = "location_code")
-  private Location Location;
+    @ManyToOne
+    @JoinColumn(name = "location_code")
+    private Location Location;
 
-  @Column(name = "state")
-  private String State;
+    @Column(name = "state")
+    private String State;
 
-  public String getUsername() {
-    return Username;
-  }
+    public String getUsername() {
+	return Username;
+    }
 
-  public void setUsername(String username) {
-    Username = username;
-  }
+    public void setUsername(String username) {
+	Username = username;
+    }
 
-  public String getFirstName() {
-    return FirstName;
-  }
+    public String getFirstName() {
+	return FirstName;
+    }
 
-  public void setFirstName(String firstName) {
-    FirstName = firstName;
-  }
+    public void setFirstName(String firstName) {
+	FirstName = firstName;
+    }
 
-  public String getLastName() {
-    return LastName;
-  }
+    public String getLastName() {
+	return LastName;
+    }
 
-  public void setLastName(String lastName) {
-    LastName = lastName;
-  }
+    public void setLastName(String lastName) {
+	LastName = lastName;
+    }
 
-  public String getIdNumber() {
-    return IdNumber;
-  }
+    public String getIdNumber() {
+	return IdNumber;
+    }
 
-  public void setIdNumber(String idNumber) {
-    IdNumber = idNumber;
-  }
+    public void setIdNumber(String idNumber) {
+	IdNumber = idNumber;
+    }
 
-  public String getPhoneNumber() {
-    return PhoneNumber;
-  }
+    public String getPhoneNumber() {
+	return PhoneNumber;
+    }
 
-  public void setPhoneNumber(String phoneNumber) {
-    PhoneNumber = phoneNumber;
-  }
+    public void setPhoneNumber(String phoneNumber) {
+	PhoneNumber = phoneNumber;
+    }
 
-  public String getType() {
-    return Type;
-  }
+    public String getType() {
+	return Type;
+    }
 
-  public void setType(String type) {
-    Type = type;
-  }
+    public void setType(String type) {
+	Type = type;
+    }
 
-  public String getPassword() {
-    return Password;
-  }
+    public String getPassword() {
+	return Password;
+    }
 
-  public void setPassword(String password) {
-    Password = password;
-  }
+    public void setPassword(String password) {
+	Password = password;
+    }
 
-  public Location getLocation() {
-    return Location;
-  }
+    public Location getLocation() {
+	return Location;
+    }
 
-  public void setLocation(Location location) {
-    Location = location;
-  }
+    public void setLocation(Location location) {
+	Location = location;
+    }
 
-  public String getState() {
-    return State;
-  }
+    public String getState() {
+	return State;
+    }
 
-  public void setState(String state) {
-    State = state;
-  }
+    public void setState(String state) {
+	State = state;
+    }
 
 }
