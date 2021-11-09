@@ -21,6 +21,7 @@ public class UserMapper {
 	newUser.setUsername(user.getUsername());
 	newUser.setPhoneNumber(user.getPhoneNumber());
 	newUser.setState(user.getState());
+	newUser.setIdNumber(user.getIdNumber());
 	return newUser;
     }
 
@@ -36,6 +37,7 @@ public class UserMapper {
 	newUser.setUsername(user.getUsername());
 	newUser.setPhoneNumber(user.getPhoneNumber());
 	newUser.setState(user.getState());
+	newUser.setIdNumber(user.getIdNumber());
 	return newUser;
     }
 }

@@ -10,12 +10,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import mainContext from "../../context/mainContext";
-import { Backdrop, CircularProgress } from "@mui/material";
 import { useHistory } from "react-router";
 import { isExpired, decodeToken } from "react-jwt";
 import { Redirect } from "react-router-dom";
 
 import { httpClient } from "../../share/httpClient.js";
+import Spin from "../../component/Spin/Spin";
 
 function Copyright(props) {
   return (
@@ -35,11 +35,31 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const { token, setToken } = React.useContext(mainContext);
+  const { token, setToken, setOpenAlert, setSeverity, setMessage } =
+    React.useContext(mainContext);
   const history = useHistory();
 
   const [submitting, setSubmitting] = React.useState(false);
 
+  const switchPage = (role) => {
+    switch (role) {
+      case "ROLE_SADMIN":
+        history.push("/sadmin");
+        break;
+      case "ROLE_ADMIN":
+        history.push("/admin");
+        break;
+      case "ROLE_STAFF":
+        history.push("/staff");
+        break;
+      case "ROLE_USER":
+        history.push("/");
+        break;
+      default:
+        history.push("/");
+        break;
+    }
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -47,36 +67,24 @@ export default function SignInSide() {
       username: data.get("username"),
       password: data.get("password"),
     };
-    const switchPage = (role) => {
-      console.log(role);
-      switch (role) {
-        case "ROLE_SADMIN":
-          history.push("/sadmin");
-          break;
-        case "ROLE_ADMIN":
-          history.push("/admin");
-          break;
-        case "ROLE_STAFF":
-          history.push("/staff");
-          break;
-        case "ROLE_USER":
-          history.push("/");
-          break;
-      }
-    };
+
     setSubmitting(true);
     httpClient
       .post("api/v1/authenticate", user)
       .then((res) => {
-        console.log(res);
         setToken(res.data.jwttoken);
         setSubmitting(false);
+        setOpenAlert(true);
+        setMessage("Login successfully");
+        setSeverity("success");
         localStorage.setItem("token", res.data.jwttoken);
         switchPage(decodeToken(res.data.jwttoken).role[0].authority);
       })
       .catch((error) => {
         setSubmitting(false);
-        console.log(error.response.data);
+        setMessage(error.response.data);
+        setOpenAlert(true);
+        setSeverity("error");
       });
   };
 
@@ -84,12 +92,7 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Backdrop
-        sx={{ color: "#bc412b", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={submitting}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <Spin state={submitting} />
 
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />

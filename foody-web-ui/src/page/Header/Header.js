@@ -15,6 +15,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import mainContext from "../../context/mainContext";
+import { useHistory } from "react-router";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,6 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Header = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const history = useHistory();
 
   const {
     countCart,
@@ -89,6 +91,10 @@ const Header = () => {
     localStorage.clear();
   };
 
+  const handleProfileOnclick = () => {
+    history.push("/profile");
+  };
+
   const handleSearchOnchange = (evt) => {
     setSearchTerm(evt.target.value);
   };
@@ -117,7 +123,7 @@ const Header = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleProfileOnclick}>Profile</MenuItem>
       <MenuItem onClick={handleLogoutOnclick}>Logout</MenuItem>
     </Menu>
   );

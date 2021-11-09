@@ -26,4 +26,13 @@ public class ExistedExceptionHandler {
 
 	return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
     }
+    
+    @ExceptionHandler(value = { NullException.class })
+    public ResponseEntity<Object> handleNullException(NullException ex) {
+	String errorMessage = ex.getMessage();
+	if (errorMessage == null)
+	    errorMessage = ex.toString();
+
+	return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.PRECONDITION_FAILED);
+    }
 }

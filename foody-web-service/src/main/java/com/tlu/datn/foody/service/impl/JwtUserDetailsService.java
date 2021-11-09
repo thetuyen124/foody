@@ -18,7 +18,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	com.tlu.datn.foody.entity.User user = userService.findByUsername(username).orElse(null);
+	com.tlu.datn.foody.entity.User user = userService.findByUsername(username);
 	UserBuilder userBuilder = null;
 	if (user != null) {
 	    userBuilder = User.withUsername(username);

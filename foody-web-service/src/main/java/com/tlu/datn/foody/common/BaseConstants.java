@@ -25,6 +25,12 @@ public class BaseConstants {
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_STAFF = "STAFF";
     public static final String ROLE_USER = "USER";
+    /*---------------------------------------------------------------------
+     *                         State for invoice
+     *-------------------------------------------------------------------*/
+    public static final String WAITING = "00";
+    public static final String IN_PROCESS = "01";
+    public static final String DONE = "02";
 
     /*---------------------------------------------------------------------
      *                            Datetime format
