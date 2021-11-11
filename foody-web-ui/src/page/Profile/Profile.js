@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { httpClient } from "../../share/httpClient";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
@@ -15,52 +15,77 @@ import { decodeToken } from "react-jwt";
 import Spin from "../../component/Spin/Spin";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import mainContext from "../../context/mainContext";
 
 const validationSchema = yup.object({
-  email: yup
-    .string("Enter your email")
-    .email("Enter a valid email")
-    .required("Email is required"),
-  password: yup
-    .string("Enter your password")
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Password is required"),
+  firstName: yup
+    .string("Enter your FirstName")
+    .required("FirstName is required"),
+  lastName: yup.string("Enter your LastName").required("lastName is required"),
+  phoneNumber: yup
+    .string("Enter your phoneNumber")
+    .matches(/0[1-9][0-9]{8}$/, "Enter valid phone number")
+    .required("phoneNumber is required"),
 });
 
 const Profile = () => {
-  const username = decodeToken(localStorage.getItem("token")).sub;
   const [user, setUser] = useState({});
   const [editableFieldDisable, setEditableFieldDisable] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-
+  const { token, setOpenAlert, setSeverity, setMessage } =
+    useContext(mainContext);
+  const username = decodeToken(token).sub;
   useEffect(() => {
+    setSubmitting(true);
     httpClient
       .get("api/v1/user/" + username)
       .then((res) => {
         setUser(res.data);
       })
       .catch((error) => {
-        console.log(error.response.data);
+        console.log(error);
       });
+    setSubmitting(false);
   }, [username]);
-  console.log(user);
 
   const formik = useFormik({
     initialValues: user,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      setSubmitting(true);
+      console.log(values);
+      httpClient
+        .put("api/v1/user/" + username, values)
+        .then((res) => {
+          setUser(res.data);
+          setOpenAlert(true);
+          setMessage("Update information successfully");
+          setSeverity("success");
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+      setEditableFieldDisable(true);
+      setSubmitting(false);
     },
   });
-
   const editOnclick = (evt) => {
     setEditableFieldDisable(false);
   };
-
+  useEffect(() => {
+    formik.setFieldValue("username", user.username);
+    formik.setFieldValue("firstName", user.firstName);
+    formik.setFieldValue("lastName", user.lastName);
+    formik.setFieldValue("phoneNumber", user.phoneNumber);
+    formik.setFieldValue("location", user.location);
+    formik.setFieldValue("type", user.type);
+    formik.setFieldValue("idNumber", user.idNumber);
+    formik.setFieldValue("state", user.state);
+    // eslint-disable-next-line
+  }, [user]);
   const onSave = () => {
     formik.handleSubmit();
   };
-
   return (
     <>
       <Header />
@@ -109,74 +134,106 @@ const Profile = () => {
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
                 defaultValue={" "}
-                value={user.username}
-                error={false}
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.username && Boolean(formik.errors.username)
+                }
                 margin="normal"
                 fullWidth
                 id="username"
                 name="username"
                 variant="standard"
                 label="Username:"
-                disabled
+                autoComplete="off"
+                InputProps={{
+                  readOnly: true,
+                }}
               />
               <TextField
                 defaultValue={" "}
-                value={user.firstName}
-                error={false}
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.firstName && Boolean(formik.errors.firstName)
+                }
+                autoCorrect={false}
                 margin="normal"
                 fullWidth
                 id="firstName"
                 name="firstName"
                 variant="standard"
                 label="First Name:"
-                disabled={editableFieldDisable}
+                autoComplete="off"
+                InputProps={{
+                  readOnly: editableFieldDisable,
+                }}
               />
               <TextField
                 defaultValue={" "}
-                value={user.lastName}
-                error={false}
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.lastName && Boolean(formik.errors.lastName)
+                }
                 margin="normal"
                 fullWidth
                 id="lastName"
                 name="lastName"
                 variant="standard"
                 label="Last Name:"
-                disabled={editableFieldDisable}
+                autoComplete="off"
+                InputProps={{
+                  readOnly: editableFieldDisable,
+                }}
               />
               <TextField
                 defaultValue={" "}
-                value={user.phoneNumber}
-                error={false}
+                value={formik.values.phoneNumber}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.phoneNumber &&
+                  Boolean(formik.errors.phoneNumber)
+                }
+                helperText={
+                  formik.touched.phoneNumber && formik.errors.phoneNumber
+                }
                 margin="normal"
                 fullWidth
                 id="phoneNumber"
                 name="phoneNumber"
                 variant="standard"
                 label="PhoneNumber:"
-                disabled={editableFieldDisable}
+                autoComplete="off"
+                InputProps={{
+                  readOnly: editableFieldDisable,
+                }}
               />
               <TextField
                 defaultValue={" "}
-                value={user.location}
-                error={false}
+                value={formik.values.location}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.location && Boolean(formik.errors.location)
+                }
+                helperText={formik.touched.location && formik.errors.location}
                 margin="normal"
                 fullWidth
                 id="location"
                 name="location"
                 variant="standard"
                 label="Location:"
-                disabled
+                autoComplete="off"
+                InputProps={{
+                  readOnly: true,
+                }}
               />
               {editableFieldDisable ? (
                 <Button onClick={editOnclick} fullWidth sx={{ mt: 3, mb: 2 }}>
                   Edit your information
                 </Button>
               ) : (
-                <Button
-                  onClick={() => setEditableFieldDisable(true)}
-                  fullWidth
-                  sx={{ mt: 3, mb: 2 }}
-                >
+                <Button onClick={onSave} fullWidth sx={{ mt: 3, mb: 2 }}>
                   Save
                 </Button>
               )}

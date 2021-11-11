@@ -10,9 +10,7 @@ import Profile from "./page/Profile/Profile";
 import CustomAlert from "./component/CustomAlert/CustomAlert";
 
 function App() {
-  const [countCart, setCountCart] = useState(0);
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [showShoppingCart, setShowShoppingCart] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
   const [severity, setSeverity] = useState("");
@@ -23,12 +21,8 @@ function App() {
       <Router>
         <mainContext.Provider
           value={{
-            countCart,
-            setCountCart,
             token,
             setToken,
-            showShoppingCart,
-            setShowShoppingCart,
             searchTerm,
             setSearchTerm,
             openAlert,

@@ -7,15 +7,14 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import mainContext from "../../context/mainContext";
+import ChangePasswordDialog from "../../component/ChangePasswordDialog/ChangePasswordDialog";
 import { useHistory } from "react-router";
+import { AccountCircle } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,23 +59,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Header = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openChangePasswordDialog, setOpenChangePasswordDialog] =
+    React.useState(false);
   const history = useHistory();
 
-  const {
-    countCart,
-    setShowShoppingCart,
-    showShoppingCart,
-    searchTerm,
-    setSearchTerm,
-    setToken,
-  } = React.useContext(mainContext);
+  const { searchTerm, setSearchTerm, setToken } = React.useContext(mainContext);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleCartClick = () => {
-    setShowShoppingCart(!showShoppingCart);
-  };
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
@@ -95,16 +86,16 @@ const Header = () => {
     history.push("/profile");
   };
 
+  const handleChangePasswordOnclick = () => {
+    setOpenChangePasswordDialog(true);
+  };
+
   const handleSearchOnchange = (evt) => {
     setSearchTerm(evt.target.value);
   };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
   };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -124,6 +115,7 @@ const Header = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleProfileOnclick}>Profile</MenuItem>
+      <MenuItem onClick={handleChangePasswordOnclick}>Change password</MenuItem>
       <MenuItem onClick={handleLogoutOnclick}>Logout</MenuItem>
     </Menu>
   );
@@ -144,32 +136,7 @@ const Header = () => {
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-    >
-      <MenuItem onClick={handleCartClick}>
-        <IconButton
-          size="large"
-          aria-label="show shopping cart"
-          color="inherit"
-        >
-          <Badge badgeContent={countCart} color="error">
-            <ShoppingCartIcon />
-          </Badge>
-        </IconButton>
-        <p>Shopping cart</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
+    ></Menu>
   );
 
   return (
@@ -182,7 +149,7 @@ const Header = () => {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            FOODY
+            HuLa
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -197,11 +164,6 @@ const Header = () => {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton size="large" color="inherit" onClick={handleCartClick}>
-              <Badge badgeContent={countCart} color="error">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
             <IconButton
               size="large"
               edge="end"
@@ -220,7 +182,7 @@ const Header = () => {
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              onClick={handleProfileMenuOpen}
               color="inherit"
             >
               <MoreIcon />
@@ -230,6 +192,10 @@ const Header = () => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <ChangePasswordDialog
+        open={openChangePasswordDialog}
+        setOpen={setOpenChangePasswordDialog}
+      />
     </header>
   );
 };
