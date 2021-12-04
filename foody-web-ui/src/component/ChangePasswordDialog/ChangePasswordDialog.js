@@ -7,32 +7,67 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import * as yup from "yup";
+import { decodeToken } from "react-jwt";
+import { httpClient } from "../../share/httpClient";
 import Password from "../Input/Password";
 import Spin from "../Spin/Spin";
+import mainContext from "../../context/mainContext";
 
 const validationSchema = yup.object({
   oldPass: yup
     .string("Enter your current password")
-    .required("password is required"),
+    // .matches(/[a-zA-Z0-9!@#$%]{8,255}$/, "Enter valid password")
+    .required("Password is required"),
   newPass: yup
     .string("Enter new password")
-    .required("new password is required"),
-  confirmNewPass: yup
+    .matches(/[a-zA-Z0-9!@#$%]{8,255}$/, "Enter valid password")
+    .required("New password is required"),
+  pass2: yup
     .string("Enter new password")
-    .required("new password is required"),
+    .matches(/[a-zA-Z0-9!@#$%]{8,255}$/, "Enter valid password")
+    .when("newPass", (password, field) =>
+      password
+        ? field
+            .required()
+            .oneOf([yup.ref("newPass")], "Confirm password not match", "asdas")
+        : field
+    )
+    .required("Confirm password is required"),
 });
 
 const ChangePasswordDialog = (props) => {
+  const { token, setToken, setOpenAlert, setSeverity, setMessage } =
+    useContext(mainContext);
+  const username = decodeToken(token).sub;
   const { open, setOpen } = props;
   const [submitting, setSubmitting] = useState(false);
   const formik = useFormik({
-    initialValues: { oldPass: "", newPass: "", confirmNewpass: "" },
+    initialValues: { oldPass: "", newPass: "", pass2: "" },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       setSubmitting(true);
       console.log(values);
+      httpClient
+        .put("api/v1/user/" + username + "/change-password", {
+          password: values.oldPass,
+          newPassword: values.newPass,
+        })
+        .then(() => {
+          setOpenAlert(true);
+          setMessage("Change password successfully");
+          setSeverity("success");
+          handleClose();
+          setToken("");
+          localStorage.clear();
+        })
+        .catch((error) => {
+          console.log(error.response);
+          setOpenAlert(true);
+          setMessage(error.response.data);
+          setSeverity("error");
+        });
       setSubmitting(false);
     },
   });
@@ -82,18 +117,13 @@ const ChangePasswordDialog = (props) => {
             required={true}
           />
           <Password
-            value={formik.values.confirmNewpass}
+            value={formik.values.pass2}
             onChange={formik.handleChange}
-            error={
-              formik.touched.confirmNewpass &&
-              Boolean(formik.errors.confirmNewpass)
-            }
-            helperText={
-              formik.touched.confirmNewpass && formik.errors.confirmNewpass
-            }
+            error={formik.touched.pass2 && Boolean(formik.errors.pass2)}
+            helperText={formik.touched.pass2 && formik.errors.pass2}
             fullWidth={true}
-            id="confirmNewpass"
-            name="confirmNewpass"
+            id="pass2"
+            name="pass2"
             variant="standard"
             label="Confirm New Password"
             autoComplete="off"

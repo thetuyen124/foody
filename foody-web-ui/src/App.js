@@ -3,11 +3,11 @@ import mainContext from "./context/mainContext";
 import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import SignInSide from "./page/SignInSide/SignInSide";
-import NormalUserPage from "./page/NormalUserPage/NormalUserPage";
 import { Route, Switch } from "react-router-dom";
 import PrivateRoute from "./component/PrivateRoute/PrivateRoute";
 import Profile from "./page/Profile/Profile";
 import CustomAlert from "./component/CustomAlert/CustomAlert";
+import Order from "./page/Order/Order";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -35,8 +35,8 @@ function App() {
         >
           <Switch>
             <Route path="/login" component={SignInSide} />
-            <PrivateRoute path="/" component={NormalUserPage} exact />;
             <PrivateRoute path="/profile" component={Profile} exact />;
+            <PrivateRoute path="/order" component={Order} exact />;
           </Switch>
           <CustomAlert />
         </mainContext.Provider>

@@ -1,2 +1,4 @@
-.profile-label {
+.ant-descriptions-title,
+.ant-descriptions-item-label {
+  font-weight: 700;
 }

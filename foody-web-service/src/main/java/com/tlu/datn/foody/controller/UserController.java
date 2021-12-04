@@ -55,7 +55,7 @@ public class UserController {
 	}
 	
 	/***
-	 * Change pass word
+	 * Change password
 	 * 
 	 * @param username
 	 * @param user

@@ -5,7 +5,8 @@ import MainContext from "../../context/mainContext";
 
 const PrivateRoute = (props) => {
   const { token } = useContext(MainContext);
-  const condition = token === null || isExpired(token);
+  const condition = token === null 
+  // || isExpired(token);
   return !condition ? (
     <Route path={props.path} exact={props.exact} component={props.component} />
   ) : (

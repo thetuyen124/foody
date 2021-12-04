@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 			userRepository.saveAndFlush(user);
 			return true;
 		}
-		return false;
+		throw new NullException("Password not match");
 	}
 
 	@Override
