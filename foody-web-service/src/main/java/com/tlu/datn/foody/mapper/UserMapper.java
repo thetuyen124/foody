@@ -40,4 +40,18 @@ public class UserMapper {
 	newUser.setIdNumber(user.getIdNumber());
 	return newUser;
     }
+    
+    public User fromDTO2(UserDTO payload) {
+    	return fromDTO2(new User(), payload);
+        }
+
+        public User fromDTO2(User newUser, UserDTO user) {
+    	newUser.setFirstName(user.getFirstName());
+    	newUser.setLastName(user.getLastName());
+    	newUser.setLocation(locationService.findBycode(user.getLocation()));
+    	newUser.setType(user.getType());
+    	newUser.setPhoneNumber(user.getPhoneNumber());
+    	newUser.setIdNumber(user.getIdNumber());
+    	return newUser;
+        }
 }

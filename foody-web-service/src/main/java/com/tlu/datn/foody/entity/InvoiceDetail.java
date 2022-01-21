@@ -67,4 +67,12 @@ public class InvoiceDetail {
 	Total = total;
     }
 
+	public InvoiceDetailId getId() {
+		return id;
+	}
+
+	public void setId(InvoiceDetailId id) {
+		this.id = id;
+	}
+
 }

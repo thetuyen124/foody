@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const rootAPI = "http://localhost:8080/";
+const rootAPI = "http://165.22.56.120:8080/";
 const getHeader = () => {
   const accessToken = localStorage.getItem("token");
   const authHeader = accessToken

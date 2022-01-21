@@ -12,19 +12,65 @@ import mainContext from "../../context/mainContext";
 import ChangePasswordDialog from "../../component/ChangePasswordDialog/ChangePasswordDialog";
 import { useHistory } from "react-router";
 import { AccountCircle } from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
+import PasswordIcon from "@mui/icons-material/Password";
+import { decodeToken } from "react-jwt";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import HomeIcon from "@mui/icons-material/Home";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import {
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import FirstLogin from "../../component/FirstLogin/FirstLogin";
 
 const Header = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openMenu, setOpenMenu] = React.useState(false);
+  const [firstLogin, setFirstLogin] = React.useState(true);
+  const [isAdmin, setIsAdmin] = React.useState(true);
+  const [isSadmin, setIsSadmin] = React.useState(true);
+  const [isStaff, setIsStaff] = React.useState(true);
   const [openChangePasswordDialog, setOpenChangePasswordDialog] =
     React.useState(false);
   const history = useHistory();
 
-  const { setToken } = React.useContext(mainContext);
+  const { token, setToken } = React.useContext(mainContext);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  React.useEffect(() => {
+    if (token) {
+      setFirstLogin(
+        decodeToken(token)
+          .role.map((r) => r.authority)
+          .filter((r) => r.includes("ROLE_-1")).length !== 0
+      );
+      setIsAdmin(
+        decodeToken(token)
+          .role.map((r) => r.authority)
+          .filter((r) => r.includes("ROLE_ADMIN")).length !== 0
+      );
+      setIsSadmin(
+        decodeToken(token)
+          .role.map((r) => r.authority)
+          .filter((r) => r.includes("ROLE_SADMIN")).length !== 0
+      );
+      setIsStaff(
+        decodeToken(token)
+          .role.map((r) => r.authority)
+          .filter((r) => r.includes("ROLE_STAFF")).length !== 0
+      );
+    }
+  }, [token]);
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
@@ -50,6 +96,11 @@ const Header = () => {
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
+
+  const handleMenu = () => {
+    setOpenMenu(!openMenu);
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -94,14 +145,18 @@ const Header = () => {
 
   return (
     <header className="header" sx={{ flexGrow: 1 }}>
+      <FirstLogin open={firstLogin} setOpen={setFirstLogin} />
       <AppBar position="static">
         <Toolbar>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{ display: { xs: "contents", sm: "contents" } }}
           >
+            <button className="btn-bg" onClick={handleMenu}>
+              <MenuIcon />
+            </button>
             <a className="a-link" href="/">
               HuLa
             </a>
@@ -140,6 +195,176 @@ const Header = () => {
         open={openChangePasswordDialog}
         setOpen={setOpenChangePasswordDialog}
       />
+      <div>
+        <React.Fragment key={"left"}>
+          <Drawer anchor={"left"} open={openMenu} onClose={handleMenu}>
+            <Box
+              role="presentation"
+              onClick={handleMenu}
+              onKeyDown={handleMenu}
+            >
+              {isSadmin ? (
+                <List>
+                  <ListItem
+                    button
+                    key="Home"
+                    onClick={() => {
+                      history.push("/sadmin");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Home" />
+                  </ListItem>
+                </List>
+              ) : isAdmin ? (
+                <List>
+                  <ListItem
+                    button
+                    key="Home"
+                    onClick={() => {
+                      history.push("/admin");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Home" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    key="handleInvoice"
+                    onClick={() => {
+                      history.push("/staff");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <ReceiptIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Xử lý đơn hàng" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    key="order"
+                    onClick={() => {
+                      history.push("/order");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <StorefrontIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Đặt hàng" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    key="invoice"
+                    onClick={() => {
+                      history.push("/invoice");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <ShoppingCartIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Đơn hàng của bạn" />
+                  </ListItem>
+                </List>
+              ) : isStaff ? (
+                <List>
+                  <ListItem
+                    button
+                    key="Home"
+                    onClick={() => {
+                      history.push("/staff");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Home" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    key="order"
+                    onClick={() => {
+                      history.push("/order");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <StorefrontIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Đặt hàng" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    key="invoice"
+                    onClick={() => {
+                      history.push("/invoice");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <ShoppingCartIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Đơn hàng của bạn" />
+                  </ListItem>
+                </List>
+              ) : (
+                <List>
+                  <ListItem
+                    button
+                    key="Home"
+                    onClick={() => {
+                      history.push("/order");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <StorefrontIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Home" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    key="invoice"
+                    onClick={() => {
+                      history.push("/invoice");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <ShoppingCartIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Đơn hàng của bạn" />
+                  </ListItem>
+                </List>
+              )}
+              <Divider />
+              <List>
+                <ListItem button key={"Profile"} onClick={handleProfileOnclick}>
+                  <ListItemIcon>
+                    <ContactPageIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={"Profile"} />
+                </ListItem>
+                <ListItem
+                  button
+                  key={"Change password"}
+                  onClick={handleChangePasswordOnclick}
+                >
+                  <ListItemIcon>
+                    <PasswordIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={"Change password"} />
+                </ListItem>
+                <ListItem button key={"Logout"} onClick={handleLogoutOnclick}>
+                  <ListItemIcon>
+                    <ExitToAppIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={"Logout"} />
+                </ListItem>
+              </List>
+            </Box>
+          </Drawer>
+        </React.Fragment>
+      </div>
     </header>
   );
 };

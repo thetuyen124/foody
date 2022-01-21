@@ -14,7 +14,7 @@ public class InvoiceDetailController {
     @Autowired
     private InvoiceDetailRepository invoice;
 
-    @GetMapping("/hello")
+    @GetMapping("/invoice")
     @CrossOrigin
     public List<InvoiceDetail> hello() {
 	return invoice.findAll();

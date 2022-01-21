@@ -6,9 +6,9 @@ server:
     contextPath: /api/v1
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/food_delivery?useSSL=false
-    username: admin
-    password: Tuyennhe124
+    url: jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6466785?user=sql6466785
+    username: sql6466785
+    password: 9CmuhVRDFY
     driverClassName: com.mysql.cj.jdbc.Driver
     validationQuery: SELECT 1
     platform: mysql

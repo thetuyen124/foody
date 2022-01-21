@@ -4,12 +4,12 @@ html {
 body {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh !important;
+  background-color: unset !important;
   margin: 0;
 }
 .container {
   background-color: rgb(205, 236, 208);
-  height: 100%;
   margin: 0 80px;
   padding: 30px 20px;
 }
@@ -20,10 +20,9 @@ body {
 .ant-page-header-heading-title,
 .title {
   display: contents;
-  color: rgb(184, 67, 21);
+  color: rgb(184, 67, 21) !important;
 }
 .display-table {
-  margin: 0px 30px;
   padding: 15px 10px;
 }
 .title {
@@ -40,6 +39,20 @@ body {
 }
 .add-btn {
   top: 30px;
+}
+.btn-bg {
+  background-color: unset;
+  border: 0px;
+  color: #b8d5b8;
+}
+.ant-table-tbody {
+  background-color: rgb(50, 50, 50, 0.2);
+}
+.ant-table-wrapper {
+  margin-top: 10px;
+}
+.add {
+  float: right;
 }
 @media only screen and (max-width: 600px) {
   .container {

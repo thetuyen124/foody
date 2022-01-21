@@ -19,5 +19,26 @@ public class InvoiceDetailId implements Serializable {
     private Invoice Invoice;
 
     @Column(name = "product_name")
-    private int ProductName;
+    private String ProductName;
+
+	public Invoice getInvoice() {
+		return Invoice;
+	}
+
+	public void setInvoice(Invoice invoice) {
+		Invoice = invoice;
+	}
+
+	public String getProductName() {
+		return ProductName;
+	}
+
+	public void setProductName(String productName) {
+		ProductName = productName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+    
 }

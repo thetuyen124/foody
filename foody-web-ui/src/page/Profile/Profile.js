@@ -267,23 +267,23 @@ const Profile = () => {
               <Descriptions title="User Info">
                 <Descriptions.Item label="UserName">
                   {" "}
-                  {user.username} tuyennt123
+                  {user.username}{" "}
                 </Descriptions.Item>
                 <Descriptions.Item label="FirstName">
                   {" "}
-                  {user.firstName} Tuyen
+                  {user.firstName}{" "}
                 </Descriptions.Item>
                 <Descriptions.Item label="LastName">
                   {" "}
-                  {user.lastName} Nguyen The
+                  {user.lastName}{" "}
                 </Descriptions.Item>
                 <Descriptions.Item label="Telephone">
                   {" "}
-                  {user.phoneNumber} 0987654321
+                  {user.phoneNumber}{" "}
                 </Descriptions.Item>
                 <Descriptions.Item label="Address">
                   {" "}
-                  {user.location} dhajks akjshdkahs kdjasd
+                  {user.location}{" "}
                 </Descriptions.Item>
               </Descriptions>
             </Box>

@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.tlu.datn.foody.common.BaseConstants;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -54,7 +56,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
 		httpSecurity.csrf().disable().authorizeRequests().antMatchers("/**/authenticate/**").permitAll()
-				.antMatchers("/**/user/**").permitAll().antMatchers("/**/admin/**").permitAll().anyRequest()
+				.antMatchers("/**/forgot-password/**").permitAll().antMatchers("/**/user/**")
+				.hasAnyRole(BaseConstants.ROLE_ADMIN, BaseConstants.ROLE_STAFF, BaseConstants.ROLE_USER,
+						BaseConstants.ROLE_SADMIN)
+				.antMatchers("/**/admin/**").permitAll().antMatchers("/**/location/**").permitAll()
+				.antMatchers("/**/order/**").hasAnyRole(BaseConstants.ROLE_ADMIN, BaseConstants.ROLE_STAFF, BaseConstants.ROLE_USER)
+				.antMatchers("/**/staff/**").hasAnyRole(BaseConstants.ROLE_ADMIN, BaseConstants.ROLE_STAFF, BaseConstants.ROLE_USER).anyRequest()
 				.authenticated().and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		httpSecurity.cors();

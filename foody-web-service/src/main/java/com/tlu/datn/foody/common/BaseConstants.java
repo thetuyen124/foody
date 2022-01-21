@@ -14,26 +14,38 @@ public class BaseConstants {
     public static final String NEW_ACCOUNT = "-1";
     public static final String ACTIVE = "00";
     public static final String INACTIVE = "01";
+    
     /*---------------------------------------------------------------------
      *                         String constants
      *-------------------------------------------------------------------*/
     public static final String EMPTY = "";
     public static final String SPACE = " ";
+    
     /*---------------------------------------------------------------------
      *                         String constants
      *-------------------------------------------------------------------*/
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_STAFF = "STAFF";
     public static final String ROLE_USER = "USER";
+    public static final String ROLE_SADMIN = "SADMIN";
+    
     /*---------------------------------------------------------------------
      *                         State for invoice
      *-------------------------------------------------------------------*/
     public static final String WAITING = "00";
-    public static final String IN_PROCESS = "01";
+    public static final String IN_PROCESS_OR_ACCEPT = "01";
     public static final String DONE = "02";
+    public static final String DECLINE = "03";
 
     /*---------------------------------------------------------------------
      *                            Datetime format
      *-------------------------------------------------------------------*/
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    /*---------------------------------------------------------------------
+     *                            Payment state
+     *-------------------------------------------------------------------*/
+    public static final String PAYMENT_WAITING = "-1";
+    public static final String OFFLINE = "00";
+    public static final String WAITING_ONLINE = "01";
+    public static final String PAYED = "02";
 }

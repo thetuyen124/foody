@@ -11,12 +11,16 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import mainContext from "../../context/mainContext";
 import { useHistory } from "react-router";
-import { isExpired, decodeToken } from "react-jwt";
+import { isExpired } from "react-jwt";
 import { Redirect } from "react-router-dom";
 
 import { httpClient } from "../../share/httpClient.js";
 import Spin from "../../component/Spin/Spin";
-
+import { Form, Input, Modal } from "antd";
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 12 },
+};
 function Copyright(props) {
   return (
     <Typography
@@ -40,25 +44,10 @@ export default function SignInSide() {
   const history = useHistory();
 
   const [submitting, setSubmitting] = React.useState(false);
-
-  const switchPage = (role) => {
-    switch (role) {
-      case "ROLE_SADMIN":
-        history.push("/sadmin");
-        break;
-      case "ROLE_ADMIN":
-        history.push("/admin");
-        break;
-      case "ROLE_STAFF":
-        history.push("/staff");
-        break;
-      case "ROLE_USER":
-        history.push("/");
-        break;
-      default:
-        history.push("/");
-        break;
-    }
+  const [forgotPassword, setForgotPassword] = React.useState(false);
+  const [username, setUsername] = React.useState("");
+  const handleUsernameChange = (evt) => {
+    setUsername(evt.target.value);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -72,13 +61,14 @@ export default function SignInSide() {
     httpClient
       .post("api/v1/authenticate", user)
       .then((res) => {
-        setToken(res.data.jwttoken);
+        localStorage.setItem("token", res.data.jwttoken);
+        console.log(res.data.jwttoken);
         setSubmitting(false);
         setOpenAlert(true);
         setMessage("Login successfully");
         setSeverity("success");
-        localStorage.setItem("token", res.data.jwttoken);
-        switchPage(decodeToken(res.data.jwttoken).role[0].authority);
+        setToken(res.data.jwttoken);
+        history.push("/welcome");
       })
       .catch((error) => {
         setSubmitting(false);
@@ -164,6 +154,13 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
+              <a
+                onClick={() => {
+                  setForgotPassword(true);
+                }}
+              >
+                Quên mật khẩu?
+              </a>
               <Button
                 type="submit"
                 fullWidth
@@ -177,6 +174,35 @@ export default function SignInSide() {
           </Box>
         </Grid>
       </Grid>
+      <Modal
+        title="Username"
+        visible={forgotPassword}
+        onCancel={() => {
+          setForgotPassword(false);
+        }}
+        footer={null}
+      >
+        <Form
+          {...layout}
+          name="nest-messages"
+          onFinish={() => {
+            history.push("/forgot-password/" + username);
+          }}
+        >
+          <Form.Item
+            name="username"
+            label="Username"
+            rules={[{ required: true }]}
+          >
+            <Input value={username} onChange={handleUsernameChange} />
+          </Form.Item>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+            <Button type="primary" htmlType="submit" danger>
+              Đặt lại mật khẩu
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </ThemeProvider>
   );
 }

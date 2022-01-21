@@ -1,5 +1,5 @@
-.header .css-hip9hq-MuiPaper-root-MuiAppBar-root {
-  background-color: #bc412b;
+.header .MuiPaper-root {
+  background-color: #bc412b !important;
   color: #b8d5b8;
 }
 .a-link {

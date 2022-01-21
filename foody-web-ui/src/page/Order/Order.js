@@ -9,11 +9,13 @@ import AddIcon from "@mui/icons-material/Add";
 import * as yup from "yup";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GridOverlay, DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CustomDialog from "../../component/CustomDialog/CustomDialog";
+import { httpClient } from "../../share/httpClient";
+import mainContext from "../../context/mainContext";
 
 const validationSchema = yup.object({
   name: yup
@@ -27,39 +29,6 @@ const validationSchema = yup.object({
   note: yup.string().max(255, "Giới hạn 255 ký tự"),
 });
 
-const initProduct = { id: -1, name: "", quantity: "1", note: "", unit: "Kg" };
-const columns = [
-  { field: "name", headerName: "Tên sản phẩm", editable: true, width: 130 },
-  {
-    field: "quantity",
-    headerName: "Số lượng",
-    type: "number",
-    editable: true,
-  },
-  { field: "unit", headerName: "Đơn vị", editable: false },
-  { field: "note", headerName: "Ghi chú", editable: true, width: 200 },
-  {
-    field: "delete",
-    headerName: "Delete",
-    width: 120,
-    sortable: false,
-    disableClickEventBubbling: true,
-    renderCell: () => {
-      return (
-        <Button
-          variant="outlined"
-          onClick={(row) => {
-            console.log(row);
-          }}
-          color="warning"
-          startIcon={<DeleteForeverIcon />}
-        >
-          Delete
-        </Button>
-      );
-    },
-  },
-];
 const StyledGridOverlay = styled(GridOverlay)(({ theme }) => ({
   flexDirection: "column",
   "& .ant-empty-img-1": {
@@ -128,16 +97,73 @@ function CustomNoRowsOverlay() {
 }
 
 const Order = () => {
-  const [products, setProducts] = useState([]);
-  const [displayProducts, setDisplayProducts] = useState([]);
-  const [deletedId, setDeletedId] = useState([]);
+  const [products, setProducts] = useState(
+    localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : []
+  );
   const [openDialog, setOpenDialog] = useState(false);
   const [productPopup, setProductPopup] = useState({});
+  const { token, setOpenAlert, setSeverity, setMessage } =
+    useContext(mainContext);
+  const lastId = () => {
+    console.log(products);
+    const reducer = (previousValue, currentValue) =>
+      previousValue.id > currentValue.id ? previousValue : currentValue;
+    if (products.length === 0) {
+      return 1;
+    }
+    console.log(products.reduce(reducer));
+    return products.reduce(reducer).id + 1;
+  };
+
+  const initProduct = { id: -1, name: "", quantity: "1", note: "", unit: "Kg" };
+  const columns = [
+    { field: "id", hide: true },
+    { field: "name", headerName: "Tên sản phẩm", editable: false, width: 130 },
+    {
+      field: "quantity",
+      headerName: "Số lượng",
+      type: "number",
+      editable: false,
+    },
+    { field: "unit", headerName: "Đơn vị", editable: false },
+    { field: "note", headerName: "Ghi chú", editable: false, width: 200 },
+    {
+      field: "delete",
+      headerName: "Delete",
+      width: 120,
+      sortable: false,
+      disableClickEventBubbling: true,
+      renderCell: (params) => {
+        return (
+          <Button
+            id={JSON.parse(localStorage.getItem("cart")).length}
+            variant="outlined"
+            onClick={(e) => {
+              const api = params.api;
+              const thisRow = {};
+              api
+                .getAllColumns()
+                .filter((c) => c.field !== "__check__" && !!c)
+                .forEach(
+                  (c) =>
+                    (thisRow[c.field] = params.getValue(params.id, c.field))
+                );
+              setProducts(products.filter((el) => el.id !== thisRow.id));
+            }}
+            color="warning"
+            startIcon={<DeleteForeverIcon />}
+          >
+            Delete
+          </Button>
+        );
+      },
+    },
+  ];
   const product = useFormik({
     initialValues: initProduct,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      values.id = products.length;
+      values.id = lastId();
       console.log(values);
       setProducts([...products, values]);
       resetForm();
@@ -145,19 +171,37 @@ const Order = () => {
   });
 
   useEffect(() => {
-    setDisplayProducts(products.filter((prod) => !deletedId.includes(prod.id)));
-  }, [products, deletedId]);
-
-  const handleEditRowsModelChange = (GridCellParams) => {
-    console.log(GridCellParams);
-  };
+    localStorage.setItem("cart", JSON.stringify(products));
+  }, [products]);
 
   const onRowClick = (GridCellParams) => {
     setProductPopup(GridCellParams.row);
     setOpenDialog(true);
   };
 
-  const deleteRow = () => {};
+  const handleCreateOrder = () => {
+    let data = products;
+    // data.forEach((element) => {
+    //   delete element.id;
+    //   delete element.unit;
+    // });
+    console.log(data);
+    httpClient
+      .post("api/v1/order", data, token)
+      .then((res) => {
+        console.log(res.data);
+        setSeverity("success");
+        setOpenAlert(true);
+        setMessage("Create order successfully");
+        setProducts([]);
+      })
+      .catch((err) => {
+        console.log(err.data);
+        setOpenAlert(true);
+        setMessage(err.response.data);
+        setSeverity("error");
+      });
+  };
 
   return (
     <>
@@ -258,19 +302,16 @@ const Order = () => {
             </li>
           </ul>
         </div>
-        <div className="display-table" style={{ height: 300, width: "88%" }}>
+        <div className="display-table" style={{ height: 300 }}>
           <div className="title">Danh sách sản phẩm</div>
           <DataGrid
             components={{
               NoRowsOverlay: CustomNoRowsOverlay,
             }}
-            id="name"
             hideFooter
-            rows={displayProducts}
+            rows={products}
             columns={columns}
-            // onEditRowsModelChange={handleEditRowsModelChange}
-            // onCellClick={onRowClick}
-            onRowEditStop={handleEditRowsModelChange}
+            onRowDoubleClick={onRowClick}
           />
         </div>
         <Button
@@ -279,9 +320,7 @@ const Order = () => {
           color="warning"
           endIcon={<AddIcon />}
           fullWidth
-          onClick={() => {
-            console.log(displayProducts);
-          }}
+          onClick={handleCreateOrder}
           style={{ marginBottom: 20 }}
         >
           Tạo đơn hàng
@@ -292,7 +331,6 @@ const Order = () => {
         open={openDialog}
         setOpen={setOpenDialog}
         product={productPopup}
-        editAble={true}
       />
       <Footer />
     </>

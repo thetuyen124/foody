@@ -21,6 +21,12 @@ public class Location {
 
     @Column(name = "commune")
     private String Commune;
+    
+    @Column(name = "state")
+    private String State;
+    
+    @Column(name = "note")
+    private String Note;
 
     public String getLocationCode() {
 	return LocationCode;
@@ -53,5 +59,21 @@ public class Location {
     public void setCommune(String commune) {
 	Commune = commune;
     }
+
+	public String getState() {
+		return State;
+	}
+
+	public void setState(String state) {
+		State = state;
+	}
+
+	public String getNote() {
+		return Note;
+	}
+
+	public void setNote(String note) {
+		Note = note;
+	}
 
 }
